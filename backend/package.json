@@ -1,15 +1,17 @@
 {
-  "name": "scrapper-backend",
+  "name": "scraper-backend",
   "version": "1.0.0",
   "description": "This is the backend of the scrapper application.",
   "main": "index.js",
-"scripts": {
-  "dev": "nodemon src/server.js",
-  "start": "node src/server.js"
-},
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
   "author": "shadab",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.16.0",
+    "cheerio": "^1.2.0",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
