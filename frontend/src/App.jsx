@@ -1,12 +1,31 @@
-import react from 'react';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-function App(){
-  return (<>
-  <div>Hello Web Scraper</div>
-  <h1 className="text-5xl text-red-500">
-  Tailwind Working
-</h1>
-    </>)
+import Home from "./pages/Home";
+import Navbar from "./components/Navbar";
+import Login from "./pages/Login";
+import StoryDetails from "./pages/StoryDetails";
+import Register from "./pages/Register";
+
+
+function App() {
+  return (
+    <BrowserRouter>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Navbar />
+        <main className="flex-grow container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Routes>
+            <Route path="/stories" element={<Home />} />
+
+            <Route path="/login" element={<Login />} />
+
+            <Route path="/register" element={<Register />} />
+
+            <Route path="/stories/:id" element={<StoryDetails />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  );
 }
 
 export default App;

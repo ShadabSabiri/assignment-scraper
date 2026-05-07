@@ -11,7 +11,7 @@ const startServer = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log("MongoDB connected");
 
-    // await scrapeHackerNews();  //this pure logic for auto-run
+    await scrapeHackerNews();  //this pure logic for auto-run
 
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
