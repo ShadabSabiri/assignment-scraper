@@ -70,8 +70,8 @@ Frontend:
 
 ### 1. Clone the repository
 
-git clone <repo-url>
-cd mern-scraper-assignment
+git clone [<repo-url>](https://github.com/ShadabSabiri/assignment-scraper.git)
+
 
 ---
 
