@@ -1,70 +1,73 @@
-const Story = require('../models/Story');
-
-
+const Story = require("../models/Story");
+const User = require("../models/User");
 
 exports.getAllStories = async (req, res) => {
   try {
-    const stories = await Story.find().sort({ points: -1 });
 
-    res.status(200).json({
-      success: true,
-      count: stories.length,
-      data: stories
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const skip = (page - 1) * limit;
+
+    const stories = await Story.find()
+      .sort({ points: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const totalStories =
+      await Story.countDocuments();
+
+    res.json({
+      stories,
+      currentPage: page,
+      totalPages: Math.ceil(totalStories / limit),
+      totalStories,
     });
 
   } catch (error) {
+
     res.status(500).json({
-      message: 'Server Error',
-      error: error.message
+      message: "Server Error",
+      error: error.message,
     });
+
   }
 };
 
 exports.getStory = async (req, res) => {
-    try {
-        const story = await Story.findById(req.params.id);
-        res.json(story);
-    } catch (error) {
-        res.status(500).json({ message: 'Server Error', error: error.message });
-    }
+  try {
+    const story = await Story.findById(req.params.id);
+    res.json(story);
+  } catch (error) {
+    res.status(500).json({ message: "Server Error", error: error.message });
+  }
 };
-
-const User = require("../models/User");
 
 exports.bookmarkStory = async (req, res) => {
   try {
-    const userId = req.user.id;
     const storyId = req.params.id;
 
-    const user = await User.findById(userId);
+    const user = await User.findById(req.user.id);
 
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
+    const alreadyBookmarked = user.bookmarks.includes(storyId);
 
-    const isBookmarked = user.bookmarks.includes(storyId);
-
-    if (isBookmarked) {
-      // remove bookmark
-      user.bookmarks = user.bookmarks.filter(
-        (id) => id.toString() !== storyId
-      );
-
-      await user.save();
-
-      return res.json({ message: "Bookmark removed" });
+    if (alreadyBookmarked) {
+      user.bookmarks = user.bookmarks.filter((id) => id.toString() !== storyId);
     } else {
-      // add bookmark
       user.bookmarks.push(storyId);
-      await user.save();
-
-      return res.json({ message: "Bookmark added" });
     }
 
+    await user.save();
+
+    return res.json({
+      bookmarked: !alreadyBookmarked,
+      bookmarks: user.bookmarks,
+      message: alreadyBookmarked ? "Bookmark removed" : "Bookmark added",
+    });
   } catch (error) {
     res.status(500).json({
       message: "Server Error",
-      error: error.message
+      error: error.message,
     });
   }
 };

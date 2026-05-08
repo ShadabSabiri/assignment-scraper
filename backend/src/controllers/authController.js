@@ -45,7 +45,8 @@ exports.login = async (req, res) => {
             _id: user.id,
             name: user.name,
             email: user.email,
-            token: generateToken(user.id, user.email)
+            token: generateToken(user.id, user.email),
+            bookmarks:user.bookmarks
         });
     } catch (error) {
         res.status(500).json({ message: 'Server Error', error: error.message });

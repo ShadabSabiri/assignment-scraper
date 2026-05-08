@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
       const res = await login(form.email,form.password);
-      navigate("/");
+      navigate("/stories");
     } catch (error) {
       console.log(error.response?.data || error.message);
       
